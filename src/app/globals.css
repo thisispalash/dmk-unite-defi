@@ -10,6 +10,10 @@
   --color-foreground: var(--foreground);
 
   --font-default: var(--font-syne-mono);
+  
+  /** @dev needed for tooltip */
+  --color-primary: var(--foreground);
+  --color-primary-foreground: var(--background);
 }
 
 /* 
