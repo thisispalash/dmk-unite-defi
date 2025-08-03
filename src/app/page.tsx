@@ -1,10 +1,10 @@
 'use client';
 
-import crypto from 'crypto';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import cn from '@/util/cn';
+
+import { useAuth } from '@/context/AuthContext';
 
 import Button from '@/component/primitive/Button';
 import TextInput from '@/component/primitive/TextInput';
@@ -12,53 +12,26 @@ import Link from '@/component/primitive/Link';
 
 export default function Landing() {
 
-  const router = useRouter();
+  const { login, register, isLoading } = useAuth();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isSending, setIsSending] = useState(false);
   const [userMessage, setUserMessage] = useState('');
 
   const handleRegister = async () => {
-    setIsSending(true);
-
-    const hashed = crypto.createHash('sha256').update(password).digest('hex');
-
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      body: JSON.stringify({ username, password: hashed }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      router.push('/home');
-    } else {
-      setUserMessage(data.message);
+    try {
+      await register(username, password);
+    } catch (error: any) {
+      setUserMessage(error.message);
     }
-
-    setIsSending(false);
   }
 
   const handleLogin = async () => {
-    setIsSending(true);
-
-    const hashed = crypto.createHash('sha256').update(password).digest('hex');
-
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password: hashed }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      router.push('/home');
-    } else {
-      setUserMessage(data.message);
+    try {
+      await login(username, password);
+    } catch (error: any) {
+      setUserMessage(error.message);
     }
-
-    setIsSending(false);
   }
 
   return (
@@ -82,7 +55,7 @@ export default function Landing() {
           label="Username"
           value={username}
           onChange={(e) => setUsername(e)}
-          isDisabled={isSending}
+          isDisabled={isLoading}
         />
 
         <TextInput
@@ -90,7 +63,7 @@ export default function Landing() {
           value={password}
           onChange={(e) => setPassword(e)}
           type="password"
-          isDisabled={isSending}
+          isDisabled={isLoading}
         />
 
         {userMessage && (
@@ -110,12 +83,14 @@ export default function Landing() {
 
           <Button
             onClick={handleRegister}
+            isDisabled={isLoading}
           >
             Register
           </Button>
 
           <Button
             onClick={handleLogin}
+            isDisabled={isLoading}
           >
             Login
           </Button>

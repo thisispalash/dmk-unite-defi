@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import cn from '@/util/cn';
 
 import LoadingProvider, { useLoading } from '@/context/LoadingContext';
+import AuthProvider from '@/context/AuthContext';
 
 import Loader from '@/component/Loader';
 
@@ -12,8 +13,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <LoadingProvider>
-      <Loader />
-      <ClientLayoutContent>{children}</ClientLayoutContent>
+      <AuthProvider>
+        <Loader />
+        <ClientLayoutContent>{children}</ClientLayoutContent>
+      </AuthProvider>
     </LoadingProvider>
   );
 }
