@@ -1,6 +1,8 @@
 'use client';
 
+import crypto from 'crypto';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import cn from '@/util/cn';
 
@@ -10,18 +12,53 @@ import Link from '@/component/primitive/Link';
 
 export default function Landing() {
 
+  const router = useRouter();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [userMessage, setUserMessage] = useState('');
 
-  const handleRegister = () => {
-    console.log('Register');
-    setUserMessage('Registering...');
+  const handleRegister = async () => {
+    setIsSending(true);
+
+    const hashed = crypto.createHash('sha256').update(password).digest('hex');
+
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify({ username, password: hashed }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      router.push('/home');
+    } else {
+      setUserMessage(data.message);
+    }
+
+    setIsSending(false);
   }
 
-  const handleLogin = () => {
-    console.log('Login');
+  const handleLogin = async () => {
+    setIsSending(true);
+
+    const hashed = crypto.createHash('sha256').update(password).digest('hex');
+
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password: hashed }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      router.push('/home');
+    } else {
+      setUserMessage(data.message);
+    }
+
+    setIsSending(false);
   }
 
   return (
@@ -45,6 +82,7 @@ export default function Landing() {
           label="Username"
           value={username}
           onChange={(e) => setUsername(e)}
+          isDisabled={isSending}
         />
 
         <TextInput
@@ -52,12 +90,13 @@ export default function Landing() {
           value={password}
           onChange={(e) => setPassword(e)}
           type="password"
+          isDisabled={isSending}
         />
 
         {userMessage && (
           <p className={cn(
-            'text-sm text-foreground',
-            'text-center',
+            'text-sm text-center',
+            'italic',
           )}>
             {userMessage}
           </p>
@@ -88,7 +127,7 @@ export default function Landing() {
       <div className={cn(
         'fixed bottom-4 right-4'
       )}>
-        <Link href="https://www.dashmonkey.xyz">Goto Lander</Link>
+        <Link href="https://dashmonkey.xyz">Goto Lander</Link>
       </div>
 
     </div>
