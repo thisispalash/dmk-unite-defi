@@ -34,7 +34,6 @@ export default function LoadingProvider({ children }: { children: React.ReactNod
   };
 
   useEffect(() => {
-    console.log('loadingSources', loadingSources);
     setIsLoading(loadingSources.size > 0);
   }, [loadingSources]);
 
