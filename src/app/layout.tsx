@@ -4,7 +4,7 @@ import './globals.css';
 
 const syneMono = Syne_Mono({
   subsets: ['latin'],
-  variable: '--font-default',
+  variable: '--font-syne-mono',
   weight: '400',
 });
 
