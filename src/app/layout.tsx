@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Syne_Mono } from 'next/font/google';
 import './globals.css';
 
+import ClientLayout from '@/component/ClientLayout';
+
 const syneMono = Syne_Mono({
   subsets: ['latin'],
   variable: '--font-syne-mono',
@@ -26,7 +28,9 @@ export default function RootLayout({
       <body
         className={`${syneMono.variable} antialiased font-default`}
       >
+      <ClientLayout>
         {children}
+      </ClientLayout>
       </body>
     </html>
   );

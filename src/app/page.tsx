@@ -6,7 +6,6 @@ import cn from '@/util/cn';
 
 import Button from '@/component/primitive/Button';
 import TextInput from '@/component/primitive/TextInput';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/component/primitive/Tooltip';
 import Link from '@/component/primitive/Link';
 
 export default function Landing() {
@@ -89,7 +88,7 @@ export default function Landing() {
       <div className={cn(
         'fixed bottom-4 right-4'
       )}>
-        <Link href="https://www.dashmonkey.xyz">Go home</Link>
+        <Link href="https://www.dashmonkey.xyz">Goto Lander</Link>
       </div>
 
     </div>
