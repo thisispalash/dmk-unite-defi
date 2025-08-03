@@ -5,7 +5,7 @@ import cn from '@/util/cn';
 interface TextInputProps {
   label: string;
   value: string;
-  type?: 'text' | 'email' | 'number';
+  type?: 'text' | 'email' | 'number' | 'password';
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
